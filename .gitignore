@@ -5,3 +5,8 @@
 # python files
 *.pyc
 __pycache__/
+
+
+# task 8
+task8/*.enc
+task8/decoded*
