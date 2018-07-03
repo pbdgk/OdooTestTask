@@ -66,6 +66,7 @@ class FileHandler:
         try:
             # TODO: check if file with same name exist
             new_path = shutil.copy(filename, destination)
+            message = os.path.abspath(new_path)
         except (NotADirectoryError, FileNotFoundError) as e:
             print("""
                 Destination folder does not exist. Create it manualy
@@ -73,25 +74,26 @@ class FileHandler:
                 """)
             exit()
 
-        new_abs_path = os.path.abspath(new_path)
-        return new_abs_path
+        return message
 
     @staticmethod
     def rename_file(filename, new_filename):
         try:
             os.rename(filename, new_filename)
-            return 'Renamed %s to %s' % (filename, new_filename)
+            message = 'Renamed %s to %s' % (filename, new_filename)
         except FileNotFoundError:
-            print('Seems somebody remove/rename file allready, so it is not \
-                   reachable by name: %s' % filename)
+            message = 'Seems somebody remove/rename file allready, so it is not \
+                       reachable by name: %s' % filename
+        return message
 
     @staticmethod
     def remove_file(filename):
         try:
             os.remove(filename)
-            return 'Removed file %s' % filename
+            message = 'Removed file %s' % filename
         except (FileNotFoundError, PermissionError) as e:
-            print(e)
+            message = e
+        return message
 
     @staticmethod
     def is_file(filename):
@@ -102,7 +104,7 @@ class FileHandler:
         return os.path.splitext(filename)[1]
 
 
-class Wathdog:
+class Watchdog:
 
     def __init__(self, config):
         self.file_handler = FileHandler(config)
