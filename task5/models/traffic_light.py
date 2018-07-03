@@ -13,8 +13,18 @@ GREEN_TIME = 10
 RED_TIME = 10
 
 
-NIGHT_MODE = 'night_mode'
-NORMAL_MODE = 'normal_mode'
+MANUAL_HINT = """
+    0: Green,
+    1: Yellow,
+    2: Red,
+    -x: exit, and return to auto mode
+    """
+
+MANUAL = {
+    "0": GREEN,
+    "1": YELLOW,
+    "2": RED,
+}
 
 
 class BaseTrafficLight:
@@ -48,10 +58,6 @@ class BaseTrafficLight:
                 for light, time_ in self._lights_cycle():
                     self.light(light, time_)
 
-    def restart(self):
-        self.auto = True
-        self.start()
-
     def light(self, color, time_):
         self.color = color
         self.time_to_switch = time_
@@ -83,8 +89,17 @@ class BaseTrafficLight:
 
 
 class TrafficLight(BaseTrafficLight):
-    pass
 
+    def manual_switch():
+        print(MANUAL_HINT)
+        while not self.auto:
+            action = input('option:? ')
+            color = MANUAL.get(action.split(), None)
+            if color is not None:
+                self.color = color
+            else:
+                print('Wrong action. Do nothing')
+                print(MANUAL_HINT)
 
 class TLSmall(TrafficLight):
     pass

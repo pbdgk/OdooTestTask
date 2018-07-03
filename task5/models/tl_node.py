@@ -1,11 +1,15 @@
 import threading
+from .traffic_light import TrafficLight
+
 
 ACTIONS = """
     -i <id>-> info
     -m <id> -> manual mode
-    -del <TrafficLight> -> remove Traffic Light to System
-    -add <TrafficLight> -> add Trafic Light to System
+    -del <id> -> remove Traffic Light from Node
+    -add <start color> -> add Trafic Light to Node
     """
+
+
 
 class TLNode:
 
@@ -41,20 +45,59 @@ class TLNode:
             if action.startswith('-i'):
                 info = self.get_info(action)
                 print(info)
+
+            elif action.startswith('-m'):
+                self.create_manual_mode(action)
+
+            elif action.startswith('-del'):
+                self.remove_tl(action)
+
+            elif action.startswith('-add'):
+                self.add_tl(action)
+
             else:
                 print('Wrong action')
+                print(self._traffic_lights)
                 print(ACTIONS)
 
-    def get_info(self, action):
+    def add_tl(self, action):
+        #  TODO: crearte func
+        start_color = input('input start color')
+        tl = TrafficLight(start_color)
+        self._traffic_lights[tl.id] = tl
+        t = threading.Thread(target=tl.start)
+        t.start()
+        print("TL started:> %s" % tl)
+
+    def remove_tl(self, action):
+        tl = self.get_tl(action)
+        if tl is not None:
+            tl.auto = False  # terminates expression for running Thread.
+            del self._traffic_lights[tl.id]
+            res = 'deleted'
+        else:
+            res = 'wrong id'
+        print(res)
+
+    def create_manual_mode(self, action):
+        tl = self.get_tl(action)
+        tl.mode = False
+        tl.manual_switch()
+
+    def get_tl(self, action):
         id_ = self.parse_id(action)
         if id_ is not None:
-            tl = self.get_tl_by_id(id_)
-            if tl is not None:
-                return tl.info
-            else:
-                print('Wrong id')
+            return self.get_tl_by_id(id_)
         else:
             print('Wrong data ')
+
+    def get_info(self, action):
+        tl = self.get_tl(action)
+        if tl is not None:
+            res = tl.info
+        else:
+            res = "Wrong id"
+        return res
 
     def parse_id(self, action):
         try:
