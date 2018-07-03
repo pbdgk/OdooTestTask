@@ -17,12 +17,6 @@ NIGHT_MODE = 'night_mode'
 NORMAL_MODE = 'normal_mode'
 
 
-ACTIONS = """
-    -i -> info
-    -m -> manual mode
-"""
-
-
 class BaseTrafficLight:
     next_id = itertools.count(1)
 

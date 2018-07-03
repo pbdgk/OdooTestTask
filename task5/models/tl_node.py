@@ -1,5 +1,11 @@
 import threading
 
+ACTIONS = """
+    -i <id>-> info
+    -m <id> -> manual mode
+    -del <TrafficLight> -> remove Traffic Light to System
+    -add <TrafficLight> -> add Trafic Light to System
+    """
 
 class TLNode:
 
@@ -29,6 +35,7 @@ class TLNode:
 
     def provision(self):
         print(self._traffic_lights)
+        print(ACTIONS)
         while True:
             action = input('-action id:> ')
             if action.startswith('-i'):
@@ -36,6 +43,7 @@ class TLNode:
                 print(info)
             else:
                 print('Wrong action')
+                print(ACTIONS)
 
     def get_info(self, action):
         id_ = self.parse_id(action)
