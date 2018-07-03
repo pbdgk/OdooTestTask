@@ -17,13 +17,14 @@ MANUAL_HINT = """
     0: Green,
     1: Yellow,
     2: Red,
-    -x: exit, and return to auto mode
+    3: exit, and return to auto mode
     """
 
 MANUAL = {
     "0": GREEN,
     "1": YELLOW,
     "2": RED,
+    "3": '-x'
 }
 
 
@@ -80,7 +81,7 @@ class BaseTrafficLight:
     def night_mode(self):
         self.mode = NIGHT_MODE
         while self.is_night_time() and self.auto:
-            self.color = YELLOW
+            self.color = BLINKING_YELLOW
             self.time_to_switch = None
             time.sleep(.5)
 
@@ -90,16 +91,21 @@ class BaseTrafficLight:
 
 class TrafficLight(BaseTrafficLight):
 
-    def manual_switch():
+    def manual_switch(self):
+        self.color = YELLOW
         print(MANUAL_HINT)
         while not self.auto:
-            action = input('option:? ')
-            color = MANUAL.get(action.split(), None)
-            if color is not None:
-                self.color = color
+            input_ = input('option:? ')
+            action = MANUAL.get(input_.strip(), None)
+            if action is not None:
+                if action == '-x':
+                    self.auto = True
+                else:
+                    self.color = action
             else:
                 print('Wrong action. Do nothing')
                 print(MANUAL_HINT)
+
 
 class TLSmall(TrafficLight):
     pass

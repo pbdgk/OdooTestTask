@@ -6,9 +6,8 @@ ACTIONS = """
     -i <id>-> info
     -m <id> -> manual mode
     -del <id> -> remove Traffic Light from Node
-    -add <start color> -> add Trafic Light to Node
+    -add -> add Trafic Light to Node
     """
-
 
 
 class TLNode:
@@ -37,6 +36,10 @@ class TLNode:
 
         self.provision()
 
+    def restart_tl(self, tl):
+        t = threading.Thread(target=tl.start)
+        t.start()
+
     def provision(self):
         print(self._traffic_lights)
         print(ACTIONS)
@@ -47,7 +50,7 @@ class TLNode:
                 print(info)
 
             elif action.startswith('-m'):
-                self.create_manual_mode(action)
+                self.manual_mode(action)
 
             elif action.startswith('-del'):
                 self.remove_tl(action)
@@ -61,7 +64,7 @@ class TLNode:
                 print(ACTIONS)
 
     def add_tl(self, action):
-        #  TODO: crearte func
+        #  TODO: create func
         start_color = input('input start color')
         tl = TrafficLight(start_color)
         self._traffic_lights[tl.id] = tl
@@ -74,15 +77,19 @@ class TLNode:
         if tl is not None:
             tl.auto = False  # terminates expression for running Thread.
             del self._traffic_lights[tl.id]
-            res = 'deleted'
+            message = 'deleted'
         else:
-            res = 'wrong id'
-        print(res)
+           message = 'wrong id'
+        print(message)
 
-    def create_manual_mode(self, action):
+    def manual_mode(self, action):
         tl = self.get_tl(action)
-        tl.mode = False
-        tl.manual_switch()
+        if tl is not None:
+            tl.auto = False
+            tl.manual_switch()
+            self.restart_tl(tl)
+        else:
+            print('error')
 
     def get_tl(self, action):
         id_ = self.parse_id(action)
@@ -94,10 +101,10 @@ class TLNode:
     def get_info(self, action):
         tl = self.get_tl(action)
         if tl is not None:
-            res = tl.info
+            message = tl.info
         else:
-            res = "Wrong id"
-        return res
+            message = "Wrong id"
+        return message
 
     def parse_id(self, action):
         try:
