@@ -72,4 +72,4 @@ if __name__ == '__main__':
     cipher = Cipher(SECRET_KEY)
     out_file = FILE_NAME + cipher.extension
     cipher.cipher(FILE_NAME, out_file)
-    cipher.decipher(FILE_NAME + cipher.extension, 'new-' + FILE_NAME)
+    cipher.decipher(FILE_NAME + cipher.extension, 'decoded-' + FILE_NAME)
