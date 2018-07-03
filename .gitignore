@@ -1,0 +1,7 @@
+# ide specific folders
+.idea/
+.vsc/
+
+# python files
+*.pyc
+__pycache__/
