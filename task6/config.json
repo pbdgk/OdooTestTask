@@ -7,7 +7,7 @@
       ".vif",
       ".cp"
     ],
-    "destinationDir": "copy/",
+    "destinationDir": "",
     "prefix": "copy-"
   },
   "rename": {
