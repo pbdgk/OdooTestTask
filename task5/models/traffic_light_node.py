@@ -36,7 +36,7 @@ class TLNode:
 
         self.provision()
 
-    def restart_tl(self, tl):
+    def start_tl(self, tl):
         t = threading.Thread(target=tl.start)
         t.start()
 
@@ -50,13 +50,16 @@ class TLNode:
                 print(info)
 
             elif action.startswith('-m'):
-                self.manual_mode(action)
+                message = self.manual_mode(action)
+                print(message)
 
             elif action.startswith('-del'):
-                self.remove_tl(action)
+                message = self.remove_tl(action)
+                print(message)
 
             elif action.startswith('-add'):
-                self.add_tl(action)
+                message = self.add_tl(action)
+                print(message)
 
             else:
                 print('Wrong action')
@@ -68,9 +71,8 @@ class TLNode:
         start_color = input('input start color')
         tl = TrafficLight(start_color)
         self._traffic_lights[tl.id] = tl
-        t = threading.Thread(target=tl.start)
-        t.start()
-        print("TL started:> %s" % tl)
+        self.start_tl(tl)
+        return "TL started:> %s" % tl
 
     def remove_tl(self, action):
         tl = self.get_tl(action)
@@ -80,23 +82,24 @@ class TLNode:
             message = 'deleted'
         else:
            message = 'wrong id'
-        print(message)
+        return message
 
     def manual_mode(self, action):
         tl = self.get_tl(action)
         if tl is not None:
             tl.auto = False
             tl.manual_switch()
-            self.restart_tl(tl)
+            self.start_tl(tl)
+            message = 'manual mode closed'
         else:
-            print('error')
+            message = 'Wrong tl id'
+        return message
 
     def get_tl(self, action):
         id_ = self.parse_id(action)
         if id_ is not None:
             return self.get_tl_by_id(id_)
-        else:
-            print('Wrong data ')
+        return None
 
     def get_info(self, action):
         tl = self.get_tl(action)
@@ -109,8 +112,7 @@ class TLNode:
     def parse_id(self, action):
         try:
             id_str = action.split()[-1]
-            id_ = int(id_str)
-            return id_
+            return int(id_str)
         except (IndexError, ValueError):
             return None
 

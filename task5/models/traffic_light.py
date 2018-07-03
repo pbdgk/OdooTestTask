@@ -108,4 +108,5 @@ class TrafficLight(BaseTrafficLight):
 
 
 class TLSmall(TrafficLight):
+    # To be continued
     pass
