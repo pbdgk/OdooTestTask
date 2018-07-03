@@ -1,0 +1,25 @@
+{
+  "protected": [
+    "config.json"
+  ],
+  "copy": {
+    "extensions": [
+      ".vif",
+      ".cp"
+    ],
+    "destinationDir": "copy/",
+    "prefix": "copy-"
+  },
+  "rename": {
+    "extensions": [
+      ".h"
+    ],
+    "renameTo": ".cpp"
+  },
+  "remove": {
+    "extensions": [
+      ".pyc",
+      ".del"
+    ]
+  }
+}
